@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/tarea1bdd
+    username: postgres
+    password: tarea1bdd
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    generate-ddl: true
+
+logging:
+  level:
+    org.springframework.web: DEBUG
+
+api:
+  base-url: https://random-d.uk/api/quack
+
