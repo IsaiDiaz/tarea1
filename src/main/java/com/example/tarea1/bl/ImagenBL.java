@@ -91,7 +91,7 @@ public class ImagenBL {
         List<ImagenDTO> imagenDTOs = new ArrayList<>();
 
         for (Imagen imagen : imagenes) {
-            imagenDTOs.add(new ImagenDTO(imagen.getUrl(), imagen.getMessage()));
+            imagenDTOs.add(new ImagenDTO(imagen.getId(), imagen.getUrl(), imagen.getMessage()));
         }
 
         return imagenDTOs;

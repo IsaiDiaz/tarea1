@@ -17,17 +17,20 @@ public class ImagenAPI {
         this.imagenBL = imagenBL;
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/imagen")
     public ImagenDTO getRandomImagen() {
         return imagenBL.getImagen();
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @DeleteMapping("/imagen/{id}")
     public ResponseEntity<String> deleteImagen(@PathVariable Long id) {
         imagenBL.deleteImagen(id);
         return ResponseEntity.ok("Imagen eliminada con éxito");
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @PutMapping("/imagen/{id}")
     public ResponseEntity<ImagenDTO> updateImagen(@PathVariable Long id, @RequestBody ImagenDTO updatedImagenDTO) {
         ImagenDTO updatedImagen = imagenBL.updateImagen(id, updatedImagenDTO);
@@ -38,6 +41,7 @@ public class ImagenAPI {
         }
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/imagen/{id}")
     public ResponseEntity<ImagenDTO> getImagenById(@PathVariable Long id) {
         ImagenDTO imagen = imagenBL.getImagenById(id);
@@ -48,6 +52,7 @@ public class ImagenAPI {
         }
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/imagenes")
     public ResponseEntity<List<ImagenDTO>> getAllImagenes() {
         List<ImagenDTO> imagenes = imagenBL.getAllImagenes();
