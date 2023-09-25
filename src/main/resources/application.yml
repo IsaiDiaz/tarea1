@@ -1,4 +1,12 @@
 spring:
+  application:
+    name: ucb-backend
+ # security:
+ #   oauth2:
+ #    resource-server:
+ #       jwt:
+ #         issuer-uri: http://localhost:8080/realms/newrealm
+ #         jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
   datasource:
     url: ${DATABASE_URL:jdbc:postgresql://172.17.0.1:5432/tarea1bdd}
     username: postgres
@@ -14,7 +22,15 @@ spring:
 logging:
   level:
     org.springframework.web: DEBUG
+    org.hibernate: ERROR
+server:
+  port: ${PORT:8081}
 
 api:
   base-url: https://random-d.uk/api/quack
+
+#token:
+#  converter:
+#    principal-attribute: preferred_username
+#    resource-id: backend
 

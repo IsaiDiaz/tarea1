@@ -3,6 +3,9 @@ package com.example.tarea1.api;
 import com.example.tarea1.bl.ImagenBL;
 import com.example.tarea1.dto.ImagenDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +24,21 @@ public class ImagenAPI {
     @GetMapping("/imagen")
     public ImagenDTO getRandomImagen() {
         return imagenBL.getImagen();
+    }
+
+    @CrossOrigin(origins = "http://localhost:4200")
+    @GetMapping("/imagenRandom")
+    public ImagenDTO getRandomImagenSinGuardar (){
+        return imagenBL.getImagenWithoutSave();
+    }
+
+    @CrossOrigin(origins = "http://localhost:4200")
+    @PostMapping("/imagen")
+    public ResponseEntity<String> getRandomImagenSinGuardar (
+            @RequestBody ImagenDTO imagenDTO
+    ){
+        imagenBL.saveImagen(imagenDTO);
+        return ResponseEntity.ok("Imagen guardada con éxito");
     }
 
     @CrossOrigin(origins = "http://localhost:4200")
@@ -54,8 +72,12 @@ public class ImagenAPI {
 
     @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/imagenes")
-    public ResponseEntity<List<ImagenDTO>> getAllImagenes() {
-        List<ImagenDTO> imagenes = imagenBL.getAllImagenes();
+    public ResponseEntity<Page<ImagenDTO>> getAllImagenes(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ImagenDTO> imagenes = imagenBL.getAllImagenes(pageable);
         return ResponseEntity.ok(imagenes);
     }
 }

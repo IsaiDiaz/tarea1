@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -84,16 +86,12 @@ public class ImagenBL {
         }
     }
 
-    public List<ImagenDTO> getAllImagenes() {
+    public Page<ImagenDTO> getAllImagenes(Pageable pageable) {
         logger.info("Obteniendo todas las imágenes");
 
-        List<Imagen> imagenes = imagenRepository.findAll();
-        List<ImagenDTO> imagenDTOs = new ArrayList<>();
-
-        for (Imagen imagen : imagenes) {
-            imagenDTOs.add(new ImagenDTO(imagen.getId(), imagen.getUrl(), imagen.getMessage()));
-        }
-
+        Page<Imagen> imagenes = imagenRepository.findAll(pageable);
+        Page<ImagenDTO> imagenDTOs = imagenes.map(imagen -> new ImagenDTO(imagen.getId(), imagen.getUrl(), imagen.getMessage()));
+        logger.info("Imágenes obtenidas");
         return imagenDTOs;
     }
 
@@ -109,6 +107,24 @@ public class ImagenBL {
         try {
             imagenDTO = objectMapper.readValue(response, ImagenDTO.class);
             saveImagen(imagenDTO);
+            return imagenDTO;
+        } catch (Exception e) {
+            logger.error("Error al obtener imagen");
+            logger.error(e.getMessage());
+            throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al obtener imagen");
+        }
+    }
+
+    public ImagenDTO getImagenWithoutSave(){
+        logger.info("Obteninedo imagen");
+        RestTemplate restTemplate = new RestTemplate();
+        String response = restTemplate.getForObject(url, String.class);
+        logger.info("Imagen obtenida");
+        logger.info(response);
+        ObjectMapper objectMapper = new ObjectMapper();
+        ImagenDTO imagenDTO = null;
+        try {
+            imagenDTO = objectMapper.readValue(response, ImagenDTO.class);
             return imagenDTO;
         } catch (Exception e) {
             logger.error("Error al obtener imagen");
